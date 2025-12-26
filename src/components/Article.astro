@@ -33,7 +33,7 @@ const sortedPosts = filteredPosts.sort((a, b) => new Date(b.date) - new Date(a.d
 		</p>
 		
 		<div class="w-full mt-12 overflow-x-auto pb-4 simple-scrollbar">
-			<div class="flex gap-6 mx-[24px]">
+			<div class="flex w-fit mx-auto gap-6 px-6">
 				{sortedPosts.slice(0, 10).map((item) => (
 					<div class="w-80 md:w-96 flex-shrink-0 h-full">
 						<ObjectItem {...item} />
