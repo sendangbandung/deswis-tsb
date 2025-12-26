@@ -15,10 +15,12 @@ const allPosts = rawPosts.map((post) => {
 		link: `/articles/${articleSlug}`,
 		thumbnail: frontmatter.thumbnail || hero.src,
 		date: frontmatter.date,
+		draft: frontmatter.draft || false,
 	}
 });
 
-const sortedPosts = allPosts.sort((a, b) => new Date(b.date) - new Date(a.date));
+const filteredPosts = allPosts.filter(post => !post.draft);
+const sortedPosts = filteredPosts.sort((a, b) => new Date(b.date) - new Date(a.date));
 ---
 <Layout 
 	title="Arsip Artikel - Desa Wisata Taman Sendang Bandung" 

@@ -23,7 +23,7 @@ import { history } from '../data/konfigurasi.js';
 		</div>
 
 		<div class="w-full md:w-1/2 flex flex-col gap-4">
-			<h2 class="text-3xl md:text-4xl font-bold hidden md:inline">Kisah Desa Kami</h2>
+			<h2 class="text-3xl md:text-4xl font-bold hidden md:inline">{history.title}</h2>
 				{history.description.map((paragraph, index) => (
 					<p class="text-lg text-gray-600" key={index}>
 						{paragraph}

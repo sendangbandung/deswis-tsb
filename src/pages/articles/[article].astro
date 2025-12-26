@@ -5,7 +5,8 @@ import Prose from '../../layouts/Prose.astro';
 
 export function getStaticPaths() {
 	const allPosts = Object.values(import.meta.glob('../../data/articles/*.md', { eager: true }));
-	return allPosts.map((post) => {
+	const filteredPosts = allPosts.filter((post) => !post.frontmatter.draft);
+	return filteredPosts.map((post) => {
 		const { file, frontmatter, Content } = post;
 		const articleSlug = frontmatter.slug || file.split('/').pop().replace('.md', '');
 
@@ -24,7 +25,7 @@ const allPosts = rawPosts.map((post) => {
 		title: frontmatter.title,
 		description: frontmatter.description,
 		link: `/articles/${articleSlug}`,
-		draft: false,
+		draft: frontmatter.draft || false,
 	}
 });
 
