@@ -1,7 +1,7 @@
 ---
 import Section from './Section.astro';
-import heroVideo from '/hero0001-0922-final.mp4';
 import { history } from '../data/konfigurasi.js';
+import heroImg from '../assets/hero.jpg';
 
 ---
 <Section id="sejarah">
@@ -10,13 +10,14 @@ import { history } from '../data/konfigurasi.js';
 			
 		<div class="w-full md:w-1/2">
 			<video
-				autoplay
 				loop
 				muted
 				playsinline
-				class="rounded-2xl shadow-xl w-full h-auto object-cover aspect-square md:aspect-auto transition-transform duration-300 hover:scale-105" 
+				preload="none"
+				poster={heroImg.src}
+				class="lazy-video rounded-2xl shadow-xl w-full h-auto object-cover aspect-square md:aspect-auto transition-transform duration-300 hover:scale-105" 
 			>
-				<source src={heroVideo} type="video/mp4" />
+				<source src="/hero0001-0922-final.mp4" type="video/mp4" />
 				Your browser does not support the video tag.
 			</video>
 
@@ -42,3 +43,30 @@ import { history } from '../data/konfigurasi.js';
 
 	</div>
 </Section>
+
+<script>
+	document.addEventListener('DOMContentLoaded', () => {
+		const lazyVideos = document.querySelectorAll('video.lazy-video');
+
+		if ('IntersectionObserver' in window) {
+			const videoObserver = new IntersectionObserver((entries, observer) => {
+				entries.forEach((entry) => {
+					if (entry.isIntersecting) {
+						const video = entry.target;
+						video.play();
+						observer.unobserve(video);
+					}
+				});
+			});
+
+			lazyVideos.forEach((video) => {
+				videoObserver.observe(video);
+			});
+		} else {
+			// Fallback for browsers that don't support IntersectionObserver
+			lazyVideos.forEach((video) => {
+				video.play();
+			});
+		}
+	});
+</script>

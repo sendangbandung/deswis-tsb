@@ -3,17 +3,31 @@ import Layout from '../../layouts/Layout.astro';
 import Footer from '../../components/Footer.astro';
 import ObjectItem from '../../components/ObjectItem.astro';
 import hero from '../../assets/hero.jpg';
+import boroImg from '../../assets/content/boro.jpg';
+import { getImage } from 'astro:assets';
+
+const optimizedBackground = await getImage({src: boroImg, format: 'webp'});
 
 const rawPosts = Object.values(import.meta.glob('../../data/articles/*.md', { eager: true }));
+const images = import.meta.glob('../../assets/**/*.{jpeg,jpg,png,webp}', { eager: true });
 
 const allPosts = rawPosts.map((post) => {
 	const {file, frontmatter} = post;
 	const articleSlug = frontmatter.slug || file.split('/').pop().replace('.md', '');
+
+	let thumbnail = hero;
+	if (frontmatter.thumbnail) {
+		const imagePath = `../../assets${frontmatter.thumbnail}`;
+		if (images[imagePath]) {
+			thumbnail = images[imagePath].default;
+		}
+	}
+
 	return {
 		title: frontmatter.title,
 		description: frontmatter.description,
 		link: `/articles/${articleSlug}`,
-		thumbnail: frontmatter.thumbnail || hero.src,
+		thumbnail: thumbnail,
 		date: frontmatter.date,
 		draft: frontmatter.draft || false,
 	}
@@ -29,7 +43,7 @@ const sortedPosts = filteredPosts.sort((a, b) => new Date(b.date) - new Date(a.d
 	<main>
 		<div
 			class="relative w-full bg-cover bg-center pt-48 pb-24"
-			style={{ backgroundImage: `url('/content/boro.jpg')` }}
+			style={{ backgroundImage: `url(${optimizedBackground.src})` }}
 		>
 			<div class="absolute inset-0 bg-black/60"></div>
 			

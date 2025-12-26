@@ -1,3 +1,9 @@
+import meetingImg from '../assets/packets/meeting.webp';
+import outboundImg from '../assets/packets/outbound.webp';
+import weddingImg from '../assets/packets/weddingtmp.webp';
+import campingImg from '../assets/packets/camping.webp';
+import gatheringImg from '../assets/packets/gathering.webp';
+
 const head = {
 	title: "Desa Wisata Taman Sendang Bandung",
 	description: "Temukan ketenangan dan keindahan alam asli di Desa Wisata Taman Sendang Bandung, Sleman, Yogyakarta."
@@ -62,27 +68,27 @@ const paket = {
 	packets: [
 		{
 			name: "Paket Meeting",
-			img: "/packets/meeting.webp",
+			img: meetingImg,
 			description: "Fasilitas lengkap untuk rapat kerja Anda di tengah suasana alam yang tenang dan inspiratif."
 		},
 		{
 			name: "Paket Outbound",
-			img: "/packets/outbound.webp",
+			img: outboundImg,
 			description: "Tingkatkan kerjasama tim dengan berbagai permainan seru dan menantang di alam terbuka."
 		},
 		{
 			name: "Paket Wedding",
-			img: "/packets/weddingtmp.webp",
+			img: weddingImg,
 			description: "Wujudkan pernikahan impian Anda dengan latar pemandangan desa yang romantis dan tak terlupakan."
 		},
 		{
 			name: "Paket Camping",
-			img: "/packets/camping.webp",
+			img: campingImg,
 			description: "Rasakan sensasi bermalam di bawah bintang dengan fasilitas camping yang nyaman dan aman."
 		},
 		{
 			name: "Paket Gathering",
-			img: "/packets/gathering.webp",
+			img: gatheringImg,
 			description: "Ciptakan momen kebersamaan yang hangat dengan berbagai aktivitas menyenangkan."
 		},
 	]

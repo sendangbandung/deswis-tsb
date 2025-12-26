@@ -2,6 +2,8 @@
 import Layout from '../../layouts/Layout.astro';
 import Footer from '../../components/Footer.astro';
 import Prose from '../../layouts/Prose.astro';
+import { getImage } from 'astro:assets';
+import heroImg from '../../assets/hero.jpg';
 
 export function getStaticPaths() {
 	const allPosts = Object.values(import.meta.glob('../../data/articles/*.md', { eager: true }));
@@ -33,12 +35,25 @@ const filteredPosts = allPosts.filter(post => !post.draft);
 const sortedPosts = filteredPosts.sort((a, b) => new Date(b.date) - new Date(a.date));
 
 const { frontmatter, Content } = Astro.props;
+
+// Resolve thumbnail image
+const images = import.meta.glob('../../assets/**/*.{jpeg,jpg,png,webp}', { eager: true });
+let thumbnailSrc = heroImg;
+
+if (frontmatter.thumbnail) {
+	const imagePath = `../../assets${frontmatter.thumbnail}`;
+	if (images[imagePath]) {
+		thumbnailSrc = images[imagePath].default;
+	}
+}
+
+const optimizedBackground = await getImage({src: thumbnailSrc, format: 'webp'});
 ---
 <Layout title={frontmatter.title} description={frontmatter.description}>
 	<main>
 		<div
 			class="relative w-full bg-cover bg-center pt-48 pb-24"
-			style={{ backgroundImage: `url(${frontmatter.thumbnail})` }}
+			style={{ backgroundImage: `url(${optimizedBackground.src})` }}
 		>
 			<div class="absolute inset-0 bg-black/70"></div>
 				

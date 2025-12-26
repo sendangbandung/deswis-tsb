@@ -1,15 +1,16 @@
 ---
+import { Image } from 'astro:assets';
 const { title, description, thumbnail, link, date, author } = Astro.props;
 ---
 <a href={link} class="card h-full flex flex-col text-left group">
 	<div class="overflow-hidden">
-		<img 
+		<Image 
 			src={thumbnail} 
 			alt={`Gambar thumbnail untuk artikel ${title}`}
 			class="w-full h-56 object-cover group-hover:scale-110 transition-transform duration-500" 
-			loading="lazy"
 			draggable="false"
-			onerror="this.onerror=null;this.src='https://placehold.co/400x224/f87171/ffffff?text=Image+Error';"
+			width={400}
+			height={224}
 		/>
 	</div>
 	<div class="p-6 flex flex-col gap-2 grow">

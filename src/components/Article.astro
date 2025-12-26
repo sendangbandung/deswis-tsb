@@ -5,15 +5,25 @@ import hero from '../assets/hero.jpg';
 import { artikel } from '../data/konfigurasi.js';
 
 const rawPosts = Object.values(import.meta.glob('../data/articles/*.md', { eager: true }));
+const images = import.meta.glob('../assets/**/*.{jpeg,jpg,png,webp}', { eager: true });
 
 const allPosts = rawPosts.map((post) => {
 	const {file, frontmatter} = post;
 	const articleSlug = frontmatter.slug || file.split('/').pop().replace('.md', '');
+	
+	let thumbnail = hero;
+	if (frontmatter.thumbnail) {
+		const imagePath = `../assets${frontmatter.thumbnail}`;
+		if (images[imagePath]) {
+			thumbnail = images[imagePath].default;
+		}
+	}
+
 	return {
 		title: frontmatter.title,
 		description: frontmatter.description,
 		link: `/articles/${articleSlug}`,
-		thumbnail: frontmatter.thumbnail || hero.src,
+		thumbnail: thumbnail,
 		date: frontmatter.date,
 		author: frontmatter.author || 'Admin',
 		draft: frontmatter.draft || false,
