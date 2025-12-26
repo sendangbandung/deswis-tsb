@@ -21,28 +21,99 @@ const galleryImages = Object.entries(images).map(([path, module]) => {
 			{galeri.subtitle}
 		</p>
 		
-		<div class="mt-12 w-full overflow-x-auto pb-4 simple-scrollbar">
-			<div class="flex gap-6">
-				{galleryImages.map((image) => (
-					<div class="w-80 md:w-96 flex-shrink-0">
-						<div class="group relative overflow-hidden rounded-2xl shadow-lg transition-all duration-300 ease-in-out cursor-pointer">
-							<img 
-								src={image.src} 
-								alt={image.alt} 
-								class="w-full h-96 object-cover scale-100 group-hover:scale-110 transition-transform duration-500" 
-								loading="lazy"
-								onerror="this.onerror=null;this.src='https://placehold.co/384x384/f87171/ffffff?text=Image+Error';"
-							/>
-							<div class="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center p-4">
-								<p class="text-white text-center text-sm md:text-base">{image.alt}</p>
+		<div class="mt-12 relative w-full group/gallery px-4 md:px-12">
+			<button 
+				id="gallery-prev"
+				class="absolute left-0 top-1/2 -translate-y-1/2 z-10 bg-white/90 hover:bg-white p-3 rounded-full shadow-lg text-gray-800 transition-all opacity-100 focus:opacity-100 translate-x-2 md:translate-x-0 active:scale-95"
+				aria-label="Scroll kiri"
+			>
+				<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-6 h-6">
+					<path stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" />
+				</svg>
+			</button>
+
+			<div id="gallery-container" class="w-full overflow-x-auto pb-4 simple-scrollbar scroll-smooth cursor-grab active:cursor-grabbing select-none">
+				<div class="flex gap-6">
+					{galleryImages.map((image) => (
+						<div class="w-80 md:w-96 flex-shrink-0">
+							<div class="group relative overflow-hidden rounded-2xl shadow-lg transition-all duration-300 ease-in-out cursor-pointer">
+								<img 
+									src={image.src} 
+									alt={image.alt} 
+									class="w-full h-96 object-cover scale-100 group-hover:scale-110 transition-transform duration-500" 
+									loading="lazy"
+									draggable="false"
+									onerror="this.onerror=null;this.src='https://placehold.co/384x384/f87171/ffffff?text=Image+Error';"
+								/>
+								<div class="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center p-4">
+									<p class="text-white text-center text-sm md:text-base">{image.alt}</p>
+								</div>
 							</div>
 						</div>
-					</div>
-				))}
+					))}
+				</div>
 			</div>
+
+			<button 
+				id="gallery-next"
+				class="absolute right-0 top-1/2 -translate-y-1/2 z-10 bg-white/90 hover:bg-white p-3 rounded-full shadow-lg text-gray-800 transition-all opacity-100 focus:opacity-100 -translate-x-2 md:translate-x-0 active:scale-95"
+				aria-label="Scroll kanan"
+			>
+				<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-6 h-6">
+					<path stroke-linecap="round" stroke-linejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
+				</svg>
+			</button>
 		</div>
 	</div>
 </Section>
+
+<script>
+	const container = document.getElementById('gallery-container');
+	const prevBtn = document.getElementById('gallery-prev');
+	const nextBtn = document.getElementById('gallery-next');
+
+	if (container && prevBtn && nextBtn) {
+		const scrollAmount = 400;
+
+		prevBtn.addEventListener('click', () => {
+			container.scrollBy({ left: -scrollAmount, behavior: 'smooth' });
+		});
+
+		nextBtn.addEventListener('click', () => {
+			container.scrollBy({ left: scrollAmount, behavior: 'smooth' });
+		});
+
+		// Mouse Drag Scrolling
+		let isDown = false;
+		let startX;
+		let scrollLeft;
+
+		container.addEventListener('mousedown', (e) => {
+			isDown = true;
+			container.classList.remove('scroll-smooth');
+			startX = e.pageX - container.offsetLeft;
+			scrollLeft = container.scrollLeft;
+		});
+
+		container.addEventListener('mouseleave', () => {
+			isDown = false;
+			container.classList.add('scroll-smooth');
+		});
+
+		container.addEventListener('mouseup', () => {
+			isDown = false;
+			container.classList.add('scroll-smooth');
+		});
+
+		container.addEventListener('mousemove', (e) => {
+			if (!isDown) return;
+			e.preventDefault();
+			const x = e.pageX - container.offsetLeft;
+			const walk = (x - startX) * 2; // Scroll speed multiplier
+			container.scrollLeft = scrollLeft - walk;
+		});
+	}
+</script>
 
 <style>
 .simple-scrollbar::-webkit-scrollbar {
