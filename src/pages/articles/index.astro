@@ -8,8 +8,8 @@ import { getImage } from 'astro:assets';
 
 const optimizedBackground = await getImage({src: boroImg, format: 'webp'});
 
-const rawPosts = Object.values(import.meta.glob('../../data/articles/*.md', { eager: true }));
-const images = import.meta.glob('../../assets/**/*.{jpeg,jpg,png,webp}', { eager: true });
+const rawPosts = Object.values(import.meta.glob('../../data/articles/*.md', { eager: true })) as any[];
+const images = import.meta.glob('../../assets/**/*.{jpeg,jpg,png,webp}', { eager: true }) as Record<string, any>;
 
 const allPosts = rawPosts.map((post) => {
 	const {file, frontmatter} = post;
@@ -34,7 +34,7 @@ const allPosts = rawPosts.map((post) => {
 });
 
 const filteredPosts = allPosts.filter(post => !post.draft);
-const sortedPosts = filteredPosts.sort((a, b) => new Date(b.date) - new Date(a.date));
+const sortedPosts = filteredPosts.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
 ---
 <Layout 
 	title="Arsip Artikel - Desa Wisata Taman Sendang Bandung" 

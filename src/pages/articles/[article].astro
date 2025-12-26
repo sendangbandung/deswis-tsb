@@ -6,7 +6,7 @@ import { getImage } from 'astro:assets';
 import heroImg from '../../assets/hero.jpg';
 
 export function getStaticPaths() {
-	const allPosts = Object.values(import.meta.glob('../../data/articles/*.md', { eager: true }));
+	const allPosts = Object.values(import.meta.glob('../../data/articles/*.md', { eager: true })) as any[];
 	return allPosts.map((post) => {
 		const { file, frontmatter, Content } = post;
 		const articleSlug = frontmatter.slug || file.split('/').pop().replace('.md', '');
@@ -18,7 +18,7 @@ export function getStaticPaths() {
 	});
 }
 
-const rawPosts = Object.values(import.meta.glob('../../data/articles/*.md', { eager: true }));
+const rawPosts = Object.values(import.meta.glob('../../data/articles/*.md', { eager: true })) as any[];
 const allPosts = rawPosts.map((post) => {
 	const { file, frontmatter } = post;
 	const articleSlug = frontmatter.slug || file.split('/').pop().replace('.md', '');
@@ -26,17 +26,18 @@ const allPosts = rawPosts.map((post) => {
 		title: frontmatter.title,
 		description: frontmatter.description,
 		link: `/articles/${articleSlug}`,
+		date: frontmatter.date,
 		draft: frontmatter.draft || false,
 	}
 });
 
 const filteredPosts = allPosts.filter(post => !post.draft);
-const sortedPosts = filteredPosts.sort((a, b) => new Date(b.date) - new Date(a.date));
+const sortedPosts = filteredPosts.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
 
 const { frontmatter, Content } = Astro.props;
 
 // Resolve thumbnail image
-const images = import.meta.glob('../../assets/**/*.{jpeg,jpg,png,webp}', { eager: true });
+const images = import.meta.glob('../../assets/**/*.{jpeg,jpg,png,webp}', { eager: true }) as Record<string, any>;
 let thumbnailSrc = heroImg;
 
 if (frontmatter.thumbnail) {

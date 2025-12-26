@@ -5,9 +5,9 @@ import hero from '../assets/hero.jpg';
 import { artikel } from '../data/konfigurasi.js';
 
 const rawPosts = Object.values(import.meta.glob('../data/articles/*.md', { eager: true }));
-const images = import.meta.glob('../assets/**/*.{jpeg,jpg,png,webp}', { eager: true });
+const images = import.meta.glob('../assets/**/*.{jpeg,jpg,png,webp}', { eager: true }) as Record<string, any>;
 
-const allPosts = rawPosts.map((post) => {
+const allPosts = rawPosts.map((post: any) => {
 	const {file, frontmatter} = post;
 	const articleSlug = frontmatter.slug || file.split('/').pop().replace('.md', '');
 	
@@ -33,7 +33,7 @@ const allPosts = rawPosts.map((post) => {
 const filteredPosts = allPosts.filter(post => {
 	return !post.draft;
 });
-const sortedPosts = filteredPosts.sort((a, b) => new Date(b.date) - new Date(a.date));
+const sortedPosts = filteredPosts.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
 ---
 <Section id="artikel" className="bg-white">
 	<div class="flex flex-col items-center w-full text-center">
@@ -89,9 +89,9 @@ const sortedPosts = filteredPosts.sort((a, b) => new Date(b.date) - new Date(a.d
 
 	if (container && prevBtn && nextBtn) {
 		const scrollAmount = 400;
-		let scrollInterval;
+		let scrollInterval: any;
 
-		const startScrolling = (direction) => {
+		const startScrolling = (direction: number) => {
 			container.scrollBy({ left: direction * scrollAmount, behavior: 'smooth' });
 			scrollInterval = setInterval(() => {
 				container.scrollBy({ left: direction * (scrollAmount / 2), behavior: 'smooth' });
@@ -99,7 +99,7 @@ const sortedPosts = filteredPosts.sort((a, b) => new Date(b.date) - new Date(a.d
 		};
 
 		const stopScrolling = () => {
-			clearInterval(scrollInterval);
+			if (scrollInterval) clearInterval(scrollInterval);
 		};
 
 		// Prev Button Events
@@ -126,8 +126,8 @@ const sortedPosts = filteredPosts.sort((a, b) => new Date(b.date) - new Date(a.d
 
 		// Mouse Drag Scrolling
 		let isDown = false;
-		let startX;
-		let scrollLeft;
+		let startX = 0;
+		let scrollLeft = 0;
 
 		container.addEventListener('mousedown', (e) => {
 			if (e.button !== 0) return;

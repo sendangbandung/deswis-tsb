@@ -25,8 +25,8 @@ import heroImg from '../assets/hero.jpg';
 
 		<div class="w-full md:w-1/2 flex flex-col gap-4">
 			<h2 class="text-3xl md:text-4xl font-bold hidden md:inline">{history.title}</h2>
-				{history.description.map((paragraph, index) => (
-					<p class="text-lg text-gray-600" key={index}>
+				{history.description.map((paragraph) => (
+					<p class="text-lg text-gray-600">
 						{paragraph}
 					</p>
 				))}
@@ -52,7 +52,7 @@ import heroImg from '../assets/hero.jpg';
 			const videoObserver = new IntersectionObserver((entries, observer) => {
 				entries.forEach((entry) => {
 					if (entry.isIntersecting) {
-						const video = entry.target;
+						const video = entry.target as HTMLVideoElement;
 						video.play();
 						observer.unobserve(video);
 					}
@@ -65,7 +65,7 @@ import heroImg from '../assets/hero.jpg';
 		} else {
 			// Fallback for browsers that don't support IntersectionObserver
 			lazyVideos.forEach((video) => {
-				video.play();
+				(video as HTMLVideoElement).play();
 			});
 		}
 	});

@@ -3,10 +3,10 @@ import Section from './Section.astro';
 import { galeri } from '../data/konfigurasi.js';
 import { Image } from 'astro:assets';
 
-const images = import.meta.glob('../data/galeri/*.{jpeg,jpg,png,webp}', { eager: true });
+const images = import.meta.glob('../data/galeri/*.{jpeg,jpg,png,webp}', { eager: true }) as Record<string, any>;
 
 const galleryImages = Object.entries(images).map(([path, module]) => {
-	const filename = path.split('/').pop().split('.')[0];
+	const filename = path.split('/').pop()?.split('.')[0] || 'image';
 	const altText = `Foto galeri ${filename.replace(/[-_]/g, ' ')}`;
 	
 	return {
@@ -75,9 +75,9 @@ const galleryImages = Object.entries(images).map(([path, module]) => {
 
 	if (container && prevBtn && nextBtn) {
 		const scrollAmount = 400;
-		let scrollInterval;
+		let scrollInterval: any;
 
-		const startScrolling = (direction) => {
+		const startScrolling = (direction: number) => {
 			container.scrollBy({ left: direction * scrollAmount, behavior: 'smooth' });
 			scrollInterval = setInterval(() => {
 				container.scrollBy({ left: direction * (scrollAmount / 2), behavior: 'smooth' });
@@ -85,7 +85,7 @@ const galleryImages = Object.entries(images).map(([path, module]) => {
 		};
 
 		const stopScrolling = () => {
-			clearInterval(scrollInterval);
+			if (scrollInterval) clearInterval(scrollInterval);
 		};
 
 		// Prev Button Events
@@ -112,8 +112,8 @@ const galleryImages = Object.entries(images).map(([path, module]) => {
 
 		// Mouse Drag Scrolling
 		let isDown = false;
-		let startX;
-		let scrollLeft;
+		let startX = 0;
+		let scrollLeft = 0;
 
 		container.addEventListener('mousedown', (e) => {
 			if (e.button !== 0) return;

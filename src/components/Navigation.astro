@@ -57,21 +57,27 @@ const navLinks = [
 	const mobileMenu = document.getElementById('mobile-menu');
 
 	const toggleMenu = () => {
-		mobileMenu.classList.toggle('hidden');
-		mobileMenu.classList.toggle('flex');
+		if (mobileMenu) {
+			mobileMenu.classList.toggle('hidden');
+			mobileMenu.classList.toggle('flex');
+		}
 	}
 
 	window.addEventListener('scroll', () => {
-		if (window.scrollY > 50) {
-			header.dataset.scrolled = 'true';
-		} else {
-			header.dataset.scrolled = 'false';
+		if (header) {
+			if (window.scrollY > 50) {
+				header.dataset.scrolled = 'true';
+			} else {
+				header.dataset.scrolled = 'false';
+			}
 		}
 	});
 
-	mobileMenuBtn.addEventListener('click', toggleMenu);
-	closeMenuBtn.addEventListener('click', toggleMenu);
-	mobileMenu.querySelectorAll('a').forEach(link => {
-		link.addEventListener('click', toggleMenu);
-	});
+	if (mobileMenuBtn) mobileMenuBtn.addEventListener('click', toggleMenu);
+	if (closeMenuBtn) closeMenuBtn.addEventListener('click', toggleMenu);
+	if (mobileMenu) {
+		mobileMenu.querySelectorAll('a').forEach(link => {
+			link.addEventListener('click', toggleMenu);
+		});
+	}
 </script>
