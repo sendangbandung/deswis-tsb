@@ -75,13 +75,39 @@ const galleryImages = Object.entries(images).map(([path, module]) => {
 
 	if (container && prevBtn && nextBtn) {
 		const scrollAmount = 400;
+		let scrollInterval;
 
-		prevBtn.addEventListener('click', () => {
-			container.scrollBy({ left: -scrollAmount, behavior: 'smooth' });
-		});
+		const startScrolling = (direction) => {
+			container.scrollBy({ left: direction * scrollAmount, behavior: 'smooth' });
+			scrollInterval = setInterval(() => {
+				container.scrollBy({ left: direction * (scrollAmount / 2), behavior: 'smooth' });
+			}, 300);
+		};
 
-		nextBtn.addEventListener('click', () => {
-			container.scrollBy({ left: scrollAmount, behavior: 'smooth' });
+		const stopScrolling = () => {
+			clearInterval(scrollInterval);
+		};
+
+		// Prev Button Events
+		prevBtn.addEventListener('mousedown', () => startScrolling(-1));
+		prevBtn.addEventListener('touchstart', (e) => {
+			e.preventDefault();
+			startScrolling(-1);
+		}, { passive: false });
+
+		// Next Button Events
+		nextBtn.addEventListener('mousedown', () => startScrolling(1));
+		nextBtn.addEventListener('touchstart', (e) => {
+			e.preventDefault();
+			startScrolling(1);
+		}, { passive: false });
+
+		// Global Stop Events
+		[prevBtn, nextBtn].forEach(btn => {
+			btn.addEventListener('mouseup', stopScrolling);
+			btn.addEventListener('mouseleave', stopScrolling);
+			btn.addEventListener('touchend', stopScrolling);
+			btn.addEventListener('contextmenu', (e) => e.preventDefault());
 		});
 
 		// Mouse Drag Scrolling
@@ -90,6 +116,7 @@ const galleryImages = Object.entries(images).map(([path, module]) => {
 		let scrollLeft;
 
 		container.addEventListener('mousedown', (e) => {
+			if (e.button !== 0) return;
 			isDown = true;
 			container.classList.remove('scroll-smooth');
 			startX = e.pageX - container.offsetLeft;
@@ -110,7 +137,7 @@ const galleryImages = Object.entries(images).map(([path, module]) => {
 			if (!isDown) return;
 			e.preventDefault();
 			const x = e.pageX - container.offsetLeft;
-			const walk = (x - startX) * 2; // Scroll speed multiplier
+			const walk = (x - startX) * 2;
 			container.scrollLeft = scrollLeft - walk;
 		});
 	}
