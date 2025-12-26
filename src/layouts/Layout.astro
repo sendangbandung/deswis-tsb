@@ -6,11 +6,13 @@ import { head } from '../data/konfigurasi.js'
 interface Props {
     title?: string;
     description?: string;
+    robots?: string;
 }
 
-const { 
+const {
 	title = head.title || "Desa Wisata Taman Sendang Bandung",
 	description = head.description || "Temukan ketenangan dan keindahan alam asli di Desa Wisata Taman Sendang Bandung, Sleman, Yogyakarta.",
+	robots = "index, follow"
 } = Astro.props;
 ---
 <!doctype html>
@@ -19,13 +21,13 @@ const {
 		<meta charset="UTF-8" />
 		<meta name="description" content={description} />
 		<meta name="viewport" content="width=device-width" />
+		<meta name="robots" content={robots} />
 		<link rel="icon" type="image/svg+xml" href="/sendangbandung.svg" />
 		<meta name="generator" content={Astro.generator} />
 		<title>{title}</title>
 		<link rel="preconnect" href="https://fonts.googleapis.com">
 		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-		<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
-	</head>
+		<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">	</head>
 	<body>
 		<Navigation />
 		<slot/>

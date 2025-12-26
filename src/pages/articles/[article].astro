@@ -7,8 +7,7 @@ import heroImg from '../../assets/hero.jpg';
 
 export function getStaticPaths() {
 	const allPosts = Object.values(import.meta.glob('../../data/articles/*.md', { eager: true }));
-	const filteredPosts = allPosts.filter((post) => !post.frontmatter.draft);
-	return filteredPosts.map((post) => {
+	return allPosts.map((post) => {
 		const { file, frontmatter, Content } = post;
 		const articleSlug = frontmatter.slug || file.split('/').pop().replace('.md', '');
 
@@ -49,7 +48,11 @@ if (frontmatter.thumbnail) {
 
 const optimizedBackground = await getImage({src: thumbnailSrc, format: 'webp'});
 ---
-<Layout title={frontmatter.title} description={frontmatter.description}>
+<Layout 
+	title={frontmatter.title} 
+	description={frontmatter.description}
+	robots={frontmatter.draft ? "noindex, nofollow" : "index, follow"}
+>
 	<main>
 		<div
 			class="relative w-full bg-cover bg-center pt-48 pb-24"
