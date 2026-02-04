@@ -10,7 +10,8 @@ const galleryImages = Object.entries(images).map(([path, module]) => {
 	const altText = `Foto galeri ${filename.replace(/[-_]/g, ' ')}`;
 	
 	return {
-		src: module.default,
+		asset: module.default, // The full image asset object for <Image /> component
+		src: module.default.src, // The actual string URL for data-image-src
 		alt: altText,
 	};
 });
@@ -37,9 +38,13 @@ const galleryImages = Object.entries(images).map(([path, module]) => {
 				<div class="flex gap-6">
 					{galleryImages.map((image) => (
 						<div class="w-80 md:w-96 flex-shrink-0">
-							<div class="group relative overflow-hidden rounded-2xl shadow-lg transition-all duration-300 ease-in-out cursor-pointer">
+							<button 
+								class="group relative overflow-hidden rounded-2xl shadow-lg transition-all duration-300 ease-in-out cursor-pointer w-full"
+								data-image-src={image.src}
+								aria-label={`Perbesar gambar ${image.alt}`}
+							>
 								<Image 
-									src={image.src} 
+									src={image.asset} 
 									alt={image.alt} 
 									class="w-full h-96 object-cover scale-100 group-hover:scale-110 transition-transform duration-500" 
 									draggable="false"
@@ -49,7 +54,7 @@ const galleryImages = Object.entries(images).map(([path, module]) => {
 								<div class="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center p-4">
 									<p class="text-white text-center text-sm md:text-base">{image.alt}</p>
 								</div>
-							</div>
+							</button>
 						</div>
 					))}
 				</div>
@@ -69,13 +74,14 @@ const galleryImages = Object.entries(images).map(([path, module]) => {
 </Section>
 
 <script>
+	// Existing gallery scroll script
 	const container = document.getElementById('gallery-container');
 	const prevBtn = document.getElementById('gallery-prev');
 	const nextBtn = document.getElementById('gallery-next');
 
 	if (container && prevBtn && nextBtn) {
-		const scrollAmount = 400;
-		let scrollInterval: any;
+		const scrollAmount: number = 400;
+		let scrollInterval: ReturnType<typeof setInterval> | undefined;
 
 		const startScrolling = (direction: number) => {
 			container.scrollBy({ left: direction * scrollAmount, behavior: 'smooth' });
@@ -90,14 +96,14 @@ const galleryImages = Object.entries(images).map(([path, module]) => {
 
 		// Prev Button Events
 		prevBtn.addEventListener('mousedown', () => startScrolling(-1));
-		prevBtn.addEventListener('touchstart', (e) => {
+		prevBtn.addEventListener('touchstart', (e: TouchEvent) => {
 			e.preventDefault();
 			startScrolling(-1);
 		}, { passive: false });
 
 		// Next Button Events
 		nextBtn.addEventListener('mousedown', () => startScrolling(1));
-		nextBtn.addEventListener('touchstart', (e) => {
+		nextBtn.addEventListener('touchstart', (e: TouchEvent) => {
 			e.preventDefault();
 			startScrolling(1);
 		}, { passive: false });
@@ -107,15 +113,15 @@ const galleryImages = Object.entries(images).map(([path, module]) => {
 			btn.addEventListener('mouseup', stopScrolling);
 			btn.addEventListener('mouseleave', stopScrolling);
 			btn.addEventListener('touchend', stopScrolling);
-			btn.addEventListener('contextmenu', (e) => e.preventDefault());
+			btn.addEventListener('contextmenu', (e: Event) => e.preventDefault());
 		});
 
 		// Mouse Drag Scrolling
-		let isDown = false;
-		let startX = 0;
-		let scrollLeft = 0;
+		let isDown: boolean = false;
+		let startX: number = 0;
+		let scrollLeft: number = 0;
 
-		container.addEventListener('mousedown', (e) => {
+		container.addEventListener('mousedown', (e: MouseEvent) => {
 			if (e.button !== 0) return;
 			isDown = true;
 			container.classList.remove('scroll-smooth');
@@ -133,7 +139,7 @@ const galleryImages = Object.entries(images).map(([path, module]) => {
 			container.classList.add('scroll-smooth');
 		});
 
-		container.addEventListener('mousemove', (e) => {
+		container.addEventListener('mousemove', (e: MouseEvent) => {
 			if (!isDown) return;
 			e.preventDefault();
 			const x = e.pageX - container.offsetLeft;
@@ -141,6 +147,18 @@ const galleryImages = Object.entries(images).map(([path, module]) => {
 			container.scrollLeft = scrollLeft - walk;
 		});
 	}
+
+	// Image preview script
+	document.querySelectorAll('#gallery-container button[data-image-src]').forEach(buttonElement => {
+		const button = buttonElement as HTMLElement; // Cast to HTMLElement
+		button.addEventListener('click', () => {
+			const imgSrc = button.dataset.imageSrc;
+			if (imgSrc) {
+				const event = new CustomEvent('openImagePreview', { detail: { src: imgSrc } });
+				document.dispatchEvent(event);
+			}
+		});
+	});
 </script>
 
 <style>

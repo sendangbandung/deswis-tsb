@@ -4,14 +4,20 @@ const { title, description, thumbnail, link, date, author } = Astro.props;
 ---
 <a href={link} class="card h-full flex flex-col text-left group">
 	<div class="overflow-hidden">
-		<Image 
-			src={thumbnail} 
-			alt={`Gambar thumbnail untuk artikel ${title}`}
-			class="w-full h-56 object-cover group-hover:scale-110 transition-transform duration-500" 
-			draggable="false"
-			width={400}
-			height={224}
-		/>
+		<button
+			class="w-full"
+			data-image-src={thumbnail.src}
+			aria-label={`Preview gambar ${title}`}
+		>
+			<Image 
+				src={thumbnail} 
+				alt={`Gambar thumbnail untuk artikel ${title}`}
+				class="w-full h-56 object-cover group-hover:scale-110 transition-transform duration-500" 
+				draggable="false"
+				width={400}
+				height={224}
+			/>
+		</button>
 	</div>
 	<div class="p-6 flex flex-col gap-2 grow">
 		<h3 class="font-bold text-xl !text-gray-800">{title}</h3>
@@ -23,4 +29,20 @@ const { title, description, thumbnail, link, date, author } = Astro.props;
 		</div>
 	</div>
 </a>
+
+<script>
+	document.querySelectorAll('.card button[data-image-src]').forEach(buttonElement => {
+		const button = buttonElement as HTMLElement; // Cast to HTMLElement
+		button.addEventListener('click', (e) => {
+			e.preventDefault(); // Prevent default link behavior
+			e.stopPropagation(); // Stop propagation to the parent <a> tag
+
+			const imgSrc = button.dataset.imageSrc;
+			if (imgSrc) {
+				const event = new CustomEvent('openImagePreview', { detail: { src: imgSrc } });
+				document.dispatchEvent(event);
+			}
+		});
+	});
+</script>
 

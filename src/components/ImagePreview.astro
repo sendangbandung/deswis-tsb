@@ -1,0 +1,34 @@
+---
+---
+<>
+  <div id="image-preview-modal" class="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center z-[9999] opacity-0 pointer-events-none transition-opacity duration-300">
+    <img id="image-preview-img" src="" alt="Preview Gambar" class="max-w-[90vw] max-h-[90vh] object-contain cursor-zoom-out" />
+  </div>
+
+  <script is:inline>
+    document.addEventListener('DOMContentLoaded', () => {
+      const modal = document.getElementById('image-preview-modal');
+      const img = document.getElementById('image-preview-img');
+
+      if (modal && img) {
+        modal.addEventListener('click', () => {
+          modal.classList.remove('opacity-100', 'pointer-events-auto');
+          modal.classList.add('opacity-0', 'pointer-events-none');
+          img.src = ''; 
+        });
+
+        document.addEventListener('openImagePreview', (event) => {
+          if (event instanceof CustomEvent && event.detail && event.detail.src) {
+            img.src = event.detail.src;
+            modal.classList.remove('opacity-0', 'pointer-events-none');
+            modal.classList.add('opacity-100', 'pointer-events-auto');
+          }
+        }); // Removed 'as EventListener' type assertion
+      }
+    });
+  </script>
+
+  <style>
+    /* You can add specific styles here if needed, but Tailwind should handle most. */
+  </style>
+</>
