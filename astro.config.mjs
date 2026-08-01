@@ -7,8 +7,11 @@ import cloudflare from '@astrojs/cloudflare';
 
 import preact from '@astrojs/preact';
 
+import sitemap from '@astrojs/sitemap';
+
 // https://astro.build/config
 export default defineConfig({
+  site: 'https://sendangbandung.com',
   vite: {
       plugins: [tailwindcss()],
       build: {
@@ -19,7 +22,7 @@ export default defineConfig({
 	},
 
   adapter: cloudflare(),
-  integrations: [preact()],
+  integrations: [preact(), sitemap()],
   image: {
     service: passthroughImageService()
   }

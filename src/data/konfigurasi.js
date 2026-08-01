@@ -9,6 +9,17 @@ const head = {
 	description: "Temukan ketenangan dan keindahan alam asli di Desa Wisata Taman Sendang Bandung, Sleman, Yogyakarta."
 }
 
+const seo = {
+	siteUrl: "https://sendangbandung.com",
+	ogImage: "/sendangbandung.webp",
+	locale: "id_ID",
+	geo: {
+		lat: "-7.771131577922186",
+		lng: "110.24289965629578",
+		place: "Karang, Sumberagung, Kec. Moyudan, Kabupaten Sleman, DIY"
+	}
+}
+
 const hero = {
 	title: "Desa Wisata Taman Sendang Bandung",
 	subtitle: "Temukan ketenangan dan keindahan alam asli di Desa Wisata Taman Sendang Bandung, Sleman, Yogyakarta.",
@@ -153,4 +164,4 @@ const testimoni = {
 
 }
 
-export { head, hero, potensi, bot, history, paket, kontak, artikel, galeri, testimoni }
+export { head, seo, hero, potensi, bot, history, paket, kontak, artikel, galeri, testimoni }
