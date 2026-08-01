@@ -8,7 +8,7 @@
 
 @layer base {
     :root {
-        --font-sans: 'Inter', 'sans-serif';
+        --font-sans: 'DM Sans', 'sans-serif';
 
         /* "Sendang Asri" Palette */
         --color-primary: #2A6F2A;      /* Forest Canopy Green (for branding, titles) */
@@ -50,6 +50,6 @@
     }
 
     .card {
-        @apply bg-white rounded-2xl shadow-lg overflow-hidden transition-all duration-300 ease-in-out hover:shadow-xl hover:-translate-y-1;
+        @apply bg-white rounded-xl shadow-lg overflow-hidden transition-all duration-300 ease-in-out hover:shadow-xl hover:-translate-y-1;
     }
 }

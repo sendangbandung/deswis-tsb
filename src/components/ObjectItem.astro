@@ -2,7 +2,7 @@
 import { Image } from 'astro:assets';
 const { title, description, thumbnail, link, date, author } = Astro.props;
 ---
-<a href={link} class="card h-full flex flex-col text-left group">
+<a href={link} class="h-full flex flex-col text-left group border border-gray-100 bg-white rounded-xl overflow-hidden transition-all duration-300 hover:shadow-md">
 	<div class="overflow-hidden">
 		<button
 			class="w-full"
@@ -12,7 +12,7 @@ const { title, description, thumbnail, link, date, author } = Astro.props;
 			<Image 
 				src={thumbnail} 
 				alt={`Gambar thumbnail untuk artikel ${title}`}
-				class="w-full h-56 object-cover group-hover:scale-110 transition-transform duration-500" 
+				class="w-full h-56 object-cover" 
 				draggable="false"
 				width={400}
 				height={224}
@@ -21,7 +21,7 @@ const { title, description, thumbnail, link, date, author } = Astro.props;
 	</div>
 	<div class="p-6 flex flex-col gap-2 grow">
 		<h3 class="font-bold text-xl !text-gray-800">{title}</h3>
-		<p class="text-gray-600 grow line-clamp-3">{description}</p>
+		<p class="text-slate-700 grow line-clamp-3">{description}</p>
 		
 		<div class="text-sm text-gray-500 mt-4 pt-4 border-t flex justify-between items-center">
 			<span>Oleh: <strong>{author}</strong></span>
