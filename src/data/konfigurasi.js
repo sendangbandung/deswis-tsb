@@ -102,14 +102,14 @@ const kontak = {
 	address: "Karang, Sumberagung, Kec. Moyudan, Kabupaten Sleman, DIY",
 	contact: [
 		{
-			name: "Nuna",
-			phone: "+62 811-8004-488",
-			link: "https://wa.me/628118004488",
-		},
-		{
 			name: "Agung",
 			phone: "+62 812-1531-9456",
 			link: "https://wa.me/6281215319456",
+		},
+		{
+			name: "Nuna",
+			phone: "+62 811-8004-488",
+			link: "https://wa.me/628118004488",
 		},
 	],
 	instagram: {
